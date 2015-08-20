@@ -1,3 +1,6 @@
+This version is for the older MJPEG firmware on the 8918 series (11.22.X>X)
+
+
 py_foscam_labcam is a python script to control the PTZ cam at FamiLAB
 
 v0.7 - 5/29/2015
