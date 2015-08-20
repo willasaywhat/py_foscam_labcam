@@ -10,7 +10,7 @@ if __name__ == "__main__":
     execfile("secret.py", sec)
 
     # Set up our camera object
-    labCam = Fi8918w(sec["foscam_realm"], sec["foscam_ip"], sec["foscam_user"], sec["foscam_password"])
+    labCam = Fi8918w(sec["foscam_ip"], sec["foscam_user"], sec["foscam_password"], sec["foscam_realm"])
    
     labCam.cam_center()
     time.sleep(20)
