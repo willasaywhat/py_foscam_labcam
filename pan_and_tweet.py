@@ -43,4 +43,4 @@ if __name__ == "__main__":
     # Tweet it:
     twitter = Twitter(
         auth = OAuth(sec["twitter_access_key"], sec["twitter_access_secret"], sec["twitter_consumer_key"], sec["twitter_consumer_secret"]))
-    results = twitter.statuses.update(status = url)
+    results = twitter.statuses.update(status = "Front Room: "+url)
