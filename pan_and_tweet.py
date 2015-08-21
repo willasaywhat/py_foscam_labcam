@@ -14,6 +14,8 @@ if __name__ == "__main__":
    
     labCam.cam_center()
     time.sleep(20)
+    labCam.cam_step_down(30)
+    time.sleep(5)
     labCam.cam_step_left(360)
     print("Camera panned to leftmost stop.")
         
@@ -26,12 +28,13 @@ if __name__ == "__main__":
         
         if x < 7: # On last iteration of the loop, don't move cam, just take a pic.
             labCam.cam_step_right(56)
+            time.sleep(5)
             
     stitch_all_images()
     
     # Info for the Imgur API
     file = "snapshots\pano.jpg"
-    title = "FamiLAB Warehouse Pano - {0}".format(datetime.datetime.utcfromtimestamp(time.time()))
+    title = "FamiLAB Lobby Pano - {0}".format(datetime.datetime.utcfromtimestamp(time.time()))
     
     url = upload_to_imgur(file, title, sec["imgur_id"], sec["imgur_apikey"])
     

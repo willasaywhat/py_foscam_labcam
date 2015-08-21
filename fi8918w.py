@@ -1,6 +1,6 @@
 import re
 import requests
-from requests.auth import HTTPDigestAuth
+from requests.auth import HTTPDigestAuth, HTTPBasicAuth
 
 DEBUG = False
 
@@ -19,7 +19,7 @@ class Fi8918w:
         self.camera_id = ""
         self.camera_name = ""
         self.alarm_status = ""
-        self.auth = None
+        self.auth = HTTPBasicAuth(self.username, self.password)
 
     # ---------- Private methods ----------
     def _make_request(self, url):
@@ -57,7 +57,6 @@ class Fi8918w:
             return None
 
         b = self._make_request(self.camera_url + command)
-
         if b:
             return b.content
         else:
@@ -111,7 +110,7 @@ class Fi8918w:
         :return: returns the image string
         """
         img_str = self._query_camera_binary('snapshot.cgi')
-        if fname:
+	if fname:
             with open(fname, 'wb') as fout:
                 fout.write(img_str)
         return img_str
