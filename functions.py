@@ -1,6 +1,8 @@
 import shutil, os, errno, time, base64, json, requests, datetime
 from PIL import Image
 from base64 import b64encode
+import time
+import boto3
 
 def empty_directory_silently(directory):
     try:
@@ -8,13 +10,13 @@ def empty_directory_silently(directory):
     except OSError as exception:
         if exception.errno != errno.EEXIST:
             raise
-    
+
     time.sleep(0.5)
-    
+
     shutil.rmtree(directory)
     time.sleep(0.5)
     os.makedirs(directory)
-  
+
 def stitch_all_images():
     im1 = Image.open("snapshots\\1.jpg")
     im2 = Image.open("snapshots\\2.jpg")
@@ -37,24 +39,35 @@ def stitch_all_images():
     new_im.paste(im7, (640 * 6, 0))
 
     new_im.save("snapshots\pano.jpg")
-    
+
 def upload_to_imgur(file, title, client_id, api_key):
         headers = {"Authorization": "Client-ID {0}".format(client_id)}
-        
+
         url = "https://api.imgur.com/3/upload.json"
-        
+
         j1 = requests.post(
-            url, 
+            url,
             headers = headers,
             data = {
-                "key": api_key, 
+                "key": api_key,
                 "image": b64encode(open(file, "rb").read()),
                 "type": "base64",
                 "name": title,
                 "title": title
             }
         )
-    
+
         data_back = json.loads(j1.content)
-        
+
         return data_back["data"]["link"]
+
+def upload_to_s3(file, access_key, access_secret_key):
+    client = boto3.client(
+        's3',
+        aws_access_key_id=access_key,
+        aws_secret_access_key=access_secret_key,
+    )
+    filename = time.strftime("%Y%m%d-%H%M%S") + '.jpg'
+    client.upload_file(file, 'famduino', filename, ExtraArgs={'ContentType': 'image/jpeg'})
+    url = '{}/{}'.format('http://famduino.s3-website-us-east-1.amazonaws.com', filename)
+    return url
